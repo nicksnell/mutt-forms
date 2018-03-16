@@ -16,8 +16,7 @@ import {
 * all other Fields
 * @class
 */
-export class Field {
-
+export default class Field {
     /**
     * Initialise the field - this will initalise the assocaited widget
     * @param {string} id the ID of the field
@@ -46,7 +45,7 @@ export class Field {
         this.locked = false
         this.parent = parent
 
-        if(!this.label) {
+        if (!this.label) {
             this.label = this.name
         }
 
@@ -55,7 +54,7 @@ export class Field {
         // Setup the widget
         let WidgetKlass = this.getWidget()
 
-        if(widget) {
+        if (widget) {
             WidgetKlass = widget
         }
 
@@ -77,13 +76,13 @@ export class Field {
     * Enable the options on the field
     */
     initOptions() {
-        if(this.options.hasOwnProperty('order')) {
+        if (this.options.hasOwnProperty('order')) {
             this.sortOrder = this.options.order
         }
-        if(this.options.hasOwnProperty('label')) {
+        if (this.options.hasOwnProperty('label')) {
             this.label = this.options.label
         }
-        if(this.options.hasOwnProperty('description')) {
+        if (this.options.hasOwnProperty('description')) {
             this.description = this.options.description
         }
     }
@@ -156,14 +155,14 @@ export class Field {
         this.refreshValidationState()
 
         let value = this.value
-        for(let validator of this.validators) {
+        for (let validator of this.validators) {
             if(!validator.validate(value)) {
                 this.errors = validator.error
                 break
             }
         }
 
-        if(this.errors.length > 0) {
+        if (this.errors.length > 0) {
             this.widget.refreshErrorState(this.errors)
             return false
         }
@@ -175,7 +174,7 @@ export class Field {
     * Turn the field from an editable elment to a readonly one
     */
     lock() {
-        if(this.locked) {
+        if (this.locked) {
             return false
         }
 
@@ -189,7 +188,7 @@ export class Field {
     * Restore a field from a locked state
     */
     unlock() {
-        if(!this.locked) {
+        if (!this.locked) {
             return false
         }
 
@@ -248,7 +247,7 @@ export class Field {
         let oldId = this.id
         this.id = newId
 
-        if(updateWidget) {
+        if (updateWidget) {
             this.widget.updateId(oldId, newId)
         }
     }
@@ -259,7 +258,7 @@ export class Field {
     updateName(newName, updateWidget = true) {
         this.name = newName
 
-        if(updateWidget) {
+        if (updateWidget) {
             this.widget.updateName(newName)
         }
     }
@@ -280,22 +279,22 @@ export class Field {
         let FieldKlass = null
         let validators = []
 
-        if(schema.description) {
+        if (schema.description) {
             fieldSpec.description = schema.description
         }
 
-        if(schema.title) {
+        if (schema.title) {
             fieldSpec.label = schema.title
         }
 
-        if(schema.default) {
+        if (schema.default) {
             fieldSpec.initial = schema.default
         }
 
-        if(schema.enum) {
+        if (schema.enum) {
             let choices = []
 
-            for(let option of schema.enum) {
+            for (let option of schema.enum) {
                 choices.push([ option, option ])
             }
 
@@ -305,35 +304,35 @@ export class Field {
 
         // This is awkward as we are trying to support the
         // legacy/Alpaca option format
-        if(options.hasOwnProperty('hidden')) {
+        if (options.hasOwnProperty('hidden')) {
             if(options.hidden) {
                 fieldSpec.widget = Mutt.config.getWidget('hidden')
             }
         }
 
-        if(schema.format) {
+        if (schema.format) {
             if(Mutt.config.hasWidget(schema.format)) {
                 fieldSpec.widget = Mutt.config.getWidget(schema.format)
             }
         }
 
-        if(options.widget) {
+        if (options.widget) {
             if(Mutt.config.hasWidget(options.widget)) {
                 fieldSpec.widget = Mutt.config.getWidget(options.widget)
             }
         }
 
-        if(schema.items) {
+        if (schema.items) {
             fieldSpec.items = schema.items
         }
 
-        if(schema.properties) {
+        if (schema.properties) {
             fieldSpec.properties = schema.properties
         }
 
         // Build validator list
-        if(required || (options.hasOwnProperty('required') && options.required)) {
-            if(schema.type === 'boolean') {
+        if (required || (options.hasOwnProperty('required') && options.required)) {
+            if (schema.type === 'boolean') {
                 validators.push(new BooleanRequiredValidator())
             } else {
                 validators.push(new RequiredValidator())
@@ -344,39 +343,39 @@ export class Field {
 
         // If the schema contains a required attribute this should be
         // a list of required descendants - not the item itself
-        if(schema.required) {
+        if (schema.required) {
             fieldSpec.required = schema.required
         }
 
-        if(schema.hasOwnProperty('minLength')) {
+        if (schema.hasOwnProperty('minLength')) {
             validators.push(
                 new LengthValidator({ min: schema.minLength })
             )
         }
 
-        if(schema.hasOwnProperty('maxLength')) {
+        if (schema.hasOwnProperty('maxLength')) {
             validators.push(
                 new LengthValidator({ max: schema.maxLength })
             )
         }
 
-        if(options.validators) {
+        if (options.validators) {
             validators.unshift(...options.validators)
         }
 
-        if(schema.hasOwnProperty('minItems')) {
+        if (schema.hasOwnProperty('minItems')) {
             fieldSpec.minItems = schema.minItems
         }
 
-        if(schema.hasOwnProperty('maxItems')) {
+        if (schema.hasOwnProperty('maxItems')) {
             fieldSpec.maxItems = schema.maxItems
         }
 
         fieldSpec.validators = validators
 
-        if(!FieldKlass) {
+        if (!FieldKlass) {
             // Attempt to get the field spec
-            if(!Mutt.config.hasField(schema.type)) {
+            if (!Mutt.config.hasField(schema.type)) {
                 return null
             }
 

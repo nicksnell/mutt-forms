@@ -8,7 +8,6 @@
 
 import MuttForm from './mutt'
 import * as fields from './fields'
-import * as widgets from './widgets'
 
 /**
  * Internal registry for Mutt fields & widgets. This is used
@@ -18,7 +17,6 @@ import * as widgets from './widgets'
  * @class
  */
 class MuttConfig {
-
     /**
      * MuttConfig is used for configuration information.
      * It's primarily used by the builder utility to decide
@@ -29,7 +27,7 @@ class MuttConfig {
     constructor() {
         this._config = {
             settings: {
-                debug: false
+                debug: false,
             },
             fields: {
                 array: fields.ArrayField,
@@ -40,36 +38,21 @@ class MuttConfig {
                 string: fields.StringField,
                 date: fields.StringField,
                 datetime: fields.StringField,
-                button: fields.ButtonField
+                button: fields.ButtonField,
             },
             widgets: {
-                array: widgets.ArrayInput,
-                checkbox: widgets.CheckboxInput,
-                checkboxlist: widgets.CheckboxList,
-                date: widgets.DateInput,
-                dateselect: widgets.DateSelectionInput,
-                number: widgets.NumberInput,
-                currency: widgets.CurrencyInput,
-                object: widgets.ObjectInput,
-                radio: widgets.RadioInput,
-                select: widgets.SelectInput,
-                text: widgets.TextInput,
-                textarea: widgets.TextAreaInput,
-                email: widgets.EmailInput,
-                hidden: widgets.HiddenInput,
-                password: widgets.PasswordInput,
-                display: widgets.DisplayWidget,
-                button: widgets.ButtonWidget
-            }
+
+            },
         }
     }
 
     /**
      * Get a setting by name
-     * @param {string} name Name of setting
+     * @param {string} name - Name of setting
+     * @return {*} - Returns setting value or null
      */
     getSetting(name) {
-        if(!this._config.settings.hasOwnProperty(name)) {
+        if (!this._config.settings.hasOwnProperty(name)) {
             return null
         }
 
@@ -78,7 +61,8 @@ class MuttConfig {
 
     /**
      * Set a setting by name
-     * @param {string} name Name of setting
+     * @param {string} name - Name of setting
+     * @param {*} value - Value of the config setting
      */
     setSetting(name, value) {
         this._config.settings[name] = value
@@ -86,55 +70,55 @@ class MuttConfig {
 
     /**
      * Use a plugin in the registry
-     * @param {object} plugin a plugin to configure, requires install method.
+     * @param {object} plugin - a plugin to configure, requires install method.
      */
     use(plugin) {
         // Check we can install the plugin
-        if(!plugin.hasOwnProperty('install')) {
+        if (!plugin.hasOwnProperty('install')) {
             throw new Error(
                 'Unable to install plugin - missing install!'
             )
         }
 
-		let pluginComponents = {}
+        let pluginComponents = {}
         let pluginFeatures = plugin.install()
 
-		// NOTE: Support for legacy plugins returning an array
-		if(Array.isArray(pluginFeatures)) {
-			let [ fields, widgets, settings ] = pluginFeatures
-			pluginComponents = { fields, widgets, settings }
-		} else {
-			pluginComponents = pluginFeatures
-		}
+        // NOTE: Support for legacy plugins returning an array
+        if (Array.isArray(pluginFeatures)) {
+            let [fields, widgets, settings] = pluginFeatures
+            pluginComponents = {fields, widgets, settings}
+        } else {
+            pluginComponents = pluginFeatures
+        }
 
-		// Fields & Widgets allow for the extension of mutt default
-		// fields & widgets
-        if(pluginComponents.fields) {
+        // Fields & Widgets allow for the extension of mutt default
+        // fields & widgets
+        if (pluginComponents.fields) {
             this.registerFields(pluginComponents.fields)
         }
 
-        if(pluginComponents.widgets) {
+        if (pluginComponents.widgets) {
             this.registerWidgets(pluginComponents.widgets)
         }
 
-		// Settings
-		// These allow for internal settings to be overidden or
-		// extended by plugins
-        if(pluginComponents.settings) {
+        // Settings
+        // These allow for internal settings to be overidden or
+        // extended by plugins
+        if (pluginComponents.settings) {
             this._config.settings = Object.assign(
                 this._config.settings,
                 pluginComponents.settings
             )
         }
 
-		// Extensions
-		// These allow for the MuttForm class to be extended
-		// or overidden by plugins
-		if(pluginComponents.extensions) {
-			Object.keys(pluginComponents.extensions).forEach((name) => {
-				let extension = pluginComponents.extensions[name]
-				MuttForm.prototype[name] = extension
-			})
+        // Extensions
+        // These allow for the MuttForm class to be extended
+        // or overidden by plugins
+        if (pluginComponents.extensions) {
+            Object.keys(pluginComponents.extensions).forEach((name) => {
+                let extension = pluginComponents.extensions[name]
+                MuttForm.prototype[name] = extension
+            })
         }
     }
 
@@ -150,12 +134,11 @@ class MuttConfig {
 
     /**
      * Register a collection of fields
-     * @param {string}
-     * @param {Widget}
+     * @param {object} fields - Array of Field classes to register
      */
     registerFields(fields) {
-        if(fields) {
-            for(let fieldType of Object.keys(fields)) {
+        if (fields) {
+            for (let fieldType of Object.keys(fields)) {
                 this.registerField(fieldType, fields[fieldType])
             }
         }
@@ -164,10 +147,10 @@ class MuttConfig {
     /**
      * Check if a field type exists in the registry
      * @param {string} type - name of field type to check
-     * @returns {bool} returns true if field type exists in registry
+     * @return {bool} Returns true if field type exists in registry
      */
     hasField(type) {
-        if(this._config.fields.hasOwnProperty(type)) {
+        if (this._config.fields.hasOwnProperty(type)) {
             return true
         }
         return false
@@ -175,10 +158,11 @@ class MuttConfig {
 
     /**
      * Get a field class
-     * @param {string}
+     * @param {string} type - String type of field class
+     * @return {*} Returns a Field class for a type or null
      */
     getField(type) {
-        if(this._config.fields.hasOwnProperty(type)) {
+        if (this._config.fields.hasOwnProperty(type)) {
             return this._config.fields[type]
         }
         return null
@@ -186,8 +170,8 @@ class MuttConfig {
 
     /**
      * Register a widget class with a key
-     * @param {string} name reference for widget
-     * @param {Widget} widgetKlass class of widget to be registered
+     * @param {string} name - reference for widget
+     * @param {Widget} widgetKlass - class of widget to be registered
      */
     registerWidget(name, widgetKlass) {
         this._config.widgets[name] = widgetKlass
@@ -195,11 +179,11 @@ class MuttConfig {
 
     /**
      * Register a collection of widgets - calls registerWidget
-     * @param {array} widgets list of widgets to register
+     * @param {array} widgets - list of widgets to register
      */
     registerWidgets(widgets) {
-        if(widgets) {
-            for(let widgetName of Object.keys(widgets)) {
+        if (widgets) {
+            for (let widgetName of Object.keys(widgets)) {
                 this.registerWidget(widgetName, widgets[widgetName])
             }
         }
@@ -207,10 +191,11 @@ class MuttConfig {
 
     /**
      * Check if a widget has been registered
-     * @param {string} name name of widget to check
+     * @param {string} name - name of widget to check
+     * @return {boolean} Returns true if widget exists, else false
      */
     hasWidget(name) {
-        if(this._config.widgets.hasOwnProperty(name)) {
+        if (this._config.widgets.hasOwnProperty(name)) {
             return true
         }
         return false
@@ -218,10 +203,11 @@ class MuttConfig {
 
     /**
      * Get a widget class by name
-     * @param {string} name name of widget class to fetch
+     * @param {string} name - name of widget class to fetch
+     * @return {*} Returns a Widget class for name or null
      */
     getWidget(name) {
-        if(this._config.widgets.hasOwnProperty(name)) {
+        if (this._config.widgets.hasOwnProperty(name)) {
             return this._config.widgets[name]
         }
         return null
@@ -229,9 +215,9 @@ class MuttConfig {
 
     /**
      * Get currently configured widgets
-     * @param {object} widgets object of currently configured widgets
+     * @return {object} object of currently configured widgets
      */
-    getWidgets(name) {
+    getWidgets() {
         return this._config.widgets
     }
 }

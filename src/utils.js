@@ -15,7 +15,7 @@ export function mixin(target, source) {
 
     Object.getOwnPropertyNames(source).forEach(
         function(name) {
-            if(name !== 'constructor') {
+            if (name !== 'constructor') {
                 Object.defineProperty(
                     target,
                     name,
@@ -31,7 +31,7 @@ export function mixin(target, source) {
  * @param message a message to be logged
  */
 export function logger(message) {
-    if(Mutt.config.getSetting('debug')) {
+    if (Mutt.config.getSetting('debug')) {
         console.log('Mutt :: ', message)
     }
 }
