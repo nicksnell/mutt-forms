@@ -8,22 +8,25 @@
 
 import MuttForm from './mutt'
 import MuttConfig from './config'
-import { logger, mixin } from './utils'
+import {logger, mixin} from './utils'
 
 import * as fields from './fields'
 import * as widgets from './widgets'
 import * as validators from './validators'
 
-export { fields, widgets, validators }
+export {fields, widgets, validators}
 
 /**
  * Main Mutt API.
- * @returns {MuttForm} Returns an instance of a MuttForm
+ * @param {object} schema - A JSON Schema definition
+ * @param {object} [options] - Configuration options for form
+ * @param {boolean} [debug] - Run Mutt in debug mode
+ * @return {MuttForm} - Returns an instance of a MuttForm
  * @example
  * let form = new Mutt({ name: { type: 'string' } })
  */
-function Mutt(schema, options, debug = false) {
-    if(debug) {
+function Mutt(schema, options = {}, debug = false) {
+    if (debug) {
         this.config.setSetting('debug', true)
     }
 
@@ -33,6 +36,7 @@ function Mutt(schema, options, debug = false) {
 
 /**
  * Internal setup for Mutt API
+ * @param {object} Mutt - Mutt interface too bootstrap
  * @private
  */
 function initApi(Mutt) {
@@ -42,11 +46,11 @@ function initApi(Mutt) {
 
     // Setup plugin interface
     Mutt.use = function(plugins) {
-        if(!Array.isArray(plugins)) {
+        if (!Array.isArray(plugins)) {
             plugins = [plugins]
         }
 
-        for(let plugin of plugins) {
+        for (let plugin of plugins) {
             Mutt.config.use(plugin)
         }
     }
@@ -58,6 +62,6 @@ function initApi(Mutt) {
 
 initApi(Mutt)
 
-Mutt.version = '1.7.0'
+Mutt.version = '2.0.0-alpha'
 
 export default Mutt

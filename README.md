@@ -20,11 +20,11 @@ Mutt forms was developed as internal tool at [boughtbymany.com](https://boughtby
 
 The easiest way to get started with Mutt is to install via NPM:
 
-`npm install mutt-forms`
+`yarn add mutt-forms`
 
 or
 
-`yarn add mutt-forms`
+`npm install mutt-forms`
 
 
 ### Getting Started
@@ -63,8 +63,10 @@ and navigating to:
 
 #### Development
 
-All pull requests should be made against the `rc` branch.
+All pull requests should be made against the `master` branch.
+Style follows [Google's styleguide](https://google.github.io/styleguide/jsguide.html)
+but omits semicolons.
 
 ---
 
-(c) Bought By Many 2017. Credit to Helena Long for the Mutt Logo :)
+(c) Bought By Many 2018. Credit to Helena Long for the Mutt Logo :)

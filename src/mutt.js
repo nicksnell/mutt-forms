@@ -6,8 +6,7 @@
 
 'use strict'
 
-import Mutt from './index'
-import { Fieldset } from './fieldsets/core'
+import {Fieldset} from './fieldsets/core'
 
 /**
  * Main Mutt form interface. This instance is used to build,
@@ -15,7 +14,6 @@ import { Fieldset } from './fieldsets/core'
  * @class
  */
 class MuttForm {
-
     /**
      * Initialisation of a Mutt form
      * @constructor
@@ -27,13 +25,13 @@ class MuttForm {
         this.options = {}
         this.callbacks = {}
 
-        if(options && options.hasOwnProperty('form')) {
+        if (options && options.hasOwnProperty('form')) {
             this.options = options.form
         }
 
         this.mount = false
-        this.multipart = false
-        this.id = null
+        this.multipart = this.options.multipart || false
+        this.id = this.options.id || null
         this.locked = false
 
         this.form = null
@@ -103,7 +101,7 @@ class MuttForm {
      * default, as a merged object of all the data
      * @param {bool} [asList] Boolean to indicate if a list of fieldset
      * data is required. Default is to return a merged object.
-     * @returns {object} key/value data object for the form
+     * @return {object} key/value data object for the form
      */
     data(asList = false) {
         if(asList) {
@@ -138,7 +136,7 @@ class MuttForm {
     /**
      * Render the form
      * @param {HTMLElement} mount Containing element for the Mutt Form
-     * @returns {Promise} a promise to be resolved once rendering
+     * @return {Promise} a promise to be resolved once rendering
      * is complete
      */
     render(mount) {
@@ -240,7 +238,7 @@ class MuttForm {
 
     /**
      * Remove the form from the stage
-     * @returns {bool} Confirmation of destruction
+     * @return {bool} Confirmation of destruction
      */
     destroy() {
         if(this.mount) {
@@ -254,7 +252,7 @@ class MuttForm {
 
     /**
      * Validate the form
-     * @returns {bool} response to the validation request
+     * @return {bool} response to the validation request
      */
     validate() {
         let valid = true
@@ -268,7 +266,7 @@ class MuttForm {
         }
 
         Mutt.logger(
-            `Validation Complete -> Status: ${valid} -> ${JSON.stringify(errors)}`
+            `Validation Complete: ${valid} -> ${JSON.stringify(errors)}`
         )
 
         return valid
@@ -286,7 +284,7 @@ class MuttForm {
     /**
      * Submit handler for the form
      * @param {Event} event Event triggering the submission
-     * @returns {bool} success or failure of submission
+     * @return {bool} success or failure of submission
      */
     submit(event) {
         // We always validate prior to validateion
@@ -356,7 +354,7 @@ class MuttForm {
 
     /**
      * Get the form ID
-     * @returns {string} ID for a form
+     * @return {string} ID for a form
      */
     getFormId() {
         return this.id

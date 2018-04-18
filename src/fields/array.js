@@ -5,16 +5,15 @@
 'use strict'
 
 import Mutt from '../index'
-import { Field } from './core'
-import { LengthValidator } from '../validators/core'
+import {Field} from './core'
+import {LengthValidator} from '../validators/core'
 
 /**
 * Array is a complex field type, which is essentially a list
 * of other fields.
 * @class
 */
-export class ArrayField extends Field {
-
+export default class ArrayField extends Field {
     /**
     *
     */
@@ -43,7 +42,7 @@ export class ArrayField extends Field {
         // We store the array fields as slots
         this.slots = []
         let buildPlaceholders = true
-        
+
         if(this.options.hasOwnProperty('disablePlaceholders')) {
             buildPlaceholders = !this.options.disablePlaceholders
         }

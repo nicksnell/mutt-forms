@@ -1,18 +1,14 @@
 {
   "name": "mutt-forms",
-  "version": "1.7.0",
+  "version": "2.0.0-alpha",
   "author": {
     "name": "Nick Snell",
     "email": "nick@boughtbymany.com"
   },
   "contributors": [
     {
-      "name": "Nick Snell",
-      "email": "nick@boughtbymany.com"
-    },
-    {
-      "name": "Richard Roth",
-      "email": "richard@boughtbymany.com"
+      "name": "Henrique Dantas",
+      "email": "henrique@boughtbymany.com"
     },
     {
       "name": "Alex Russell",
@@ -34,42 +30,31 @@
     "url": "https://github.com/boughtbymany/mutt-forms/issues"
   },
   "keywords": [
-    "mutt-forms", "forms", "htmlforms", "form", "mutt"
+    "mutt-forms",
+    "forms",
+    "htmlforms",
+    "form",
+    "mutt",
+    "jsonschema",
+    "schema",
+    "json",
+    "form builder"
   ],
   "dependencies": {},
   "devDependencies": {
-    "babel-eslint": "^8.0.1",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "chai": "^3.5.0",
-    "eslint": "^3.19.0",
-    "eslint-changes": "^0.1.2",
-    "eslint-config-standard": "^6.2.1",
-    "eslint-friendly-formatter": "^2.0.7",
-    "eslint-loader": "^1.7.1",
-    "eslint-plugin-destructuring": "^2.1.0",
-    "eslint-plugin-html": "^2.0.0",
-    "eslint-plugin-promise": "^3.4.0",
-    "eslint-plugin-standard": "^2.0.1",
-    "jsdoc": "^3.4.3",
-    "jsdom": "^9.12.0",
-    "minami": "^1.2.3",
-    "mocha": "^3.4.2",
-    "mocha-jsdom": "^1.1.0",
-    "webpack": "^3.0.0"
+    "babel-core": "^6.26.0",
+    "babel-env": "^2.4.1",
+    "babel-eslint": "^8.2.2",
+    "babel-jest": "^23.0.0-alpha.0",
+    "eslint": "^4.19.0",
+    "eslint-config-google": "^0.9.1",
+    "gitbook": "^3.2.3",
+    "jest": "^22.4.2",
+    "webpack": "^4.1.1"
   },
   "scripts": {
-    "build": "webpack",
-    "unit": "./node_modules/mocha/bin/mocha --require babel-polyfill --compilers js:babel-register --recursive test/unit/specs; exit 0",
-    "test": "yarn run unit",
-    "lint": "eslint --ext .js src; exit 0",
-    "docs": "./node_modules/jsdoc/jsdoc.js -c .jsdoc.json"
+    "test": "jest",
+    "lint": "eslint --ext .js src/validators/index.js"
   },
-  "license": "MIT",
-  "babel": {
-    "babelrc": false,
-    "presets": [
-      "env"
-    ]
-  }
+  "license": "MIT"
 }
