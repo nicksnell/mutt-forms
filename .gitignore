@@ -1,4 +1,12 @@
-node_modules
-dist
 *.log
 .DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+*~
+*.orig
+bin/
+build/
+include/
+node_modules
+_book/

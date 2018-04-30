@@ -1,47 +1,122 @@
+<!DOCTYPE html>
 <html>
 <head>
     <title>Mutt Forms</title>
-    <script src="../dist/mutt.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+    <!-- Need this for IE 11 support... -->
+    <!--<script src="../../node_modules/babel-polyfill/dist/polyfill.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js"></script>
+    <script src="../dist/mutt-forms.min.js"></script>
+    <style>
+      body {
+        padding: 50px 0;
+      }
+      fieldset {
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+        padding: 10px;
+      }
+      label {
+        font-weight: bold;
+        width: 100px;
+      }
+      .mutt-help {
+        font-style: italic;
+        display: block;
+        padding: 0 0 10px 0;
+      }
+      #schema, #options {
+        background: #f9f9f9;
+        padding: 10px;
+      }
+    </style>
 </head>
 <body>
-    <h1>Playground</h1>
-    <p>A place to play around with the standalone version.</p>
-    <div id="form"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <h1>Mutt Forms</h1>
+          <p>A place to play around with the standalone version....</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6">
+          <h3>
+            Schema
+          </h3>
+          <div>
+            <pre id="schema" contenteditable>
+{
+  "type": "object",
+  "properties": {
+    "name": {
+        "type": "string"
+    },
+    "number": {
+        "type": "integer"
+    },
+    "truefalse": {
+        "type": "boolean"
+    }
+  }
+}</pre>
+          </div>
+          <h3>
+            Options
+          </h3>
+          <div>
+            <pre id="options" contenteditable>
+{
+  "fields": {
+    "name": {
+        "help": "Some help with this field?"
+    },
+    "truefalse": {
+        "label": "True or False?"
+    }
+  }
+}</pre>
+          </div>
+          <button onClick="renderForm(); return false;">
+            Render Form
+          </button>
+        </div>
+        <div class="col-lg-6">
+          <h3>
+            Form
+          </h3>
+          <div id="form"></div>
+          <hr>
+          <pre id="submitted" style="display:none"></pre>
+        </div>
+      </div>
+    </div>
     <script>
-        var schema = {
-            type: 'object',
-            properties: {
-                name: {
-                    type: 'string'
-                },
-                number: {
-                    type: 'integer'
-                },
-                truefalse: {
-                    type: 'boolean'
-                }
-            }
-        };
-
-        var options = {
-            fields: {
-                name: {
-                    help: 'Some help with this field'
-                },
-                truefalse: {
-                    label: "True or False?"
-                }
-            }
-        };
-
-        var form = new Mutt(
+        var form = null;
+      
+        function renderForm() {
+          var schema = JSON.parse(document.getElementById('schema').textContent);
+          var options = JSON.parse(document.getElementById('options').textContent);
+          
+          if(form !== null) {
+            form.destroy()
+          }
+          
+          form = new Mutt(
             schema,
             options
-        )
-
-        form.on('submit', (data, e) => {
+          )
+          
+          form.on('submit', function(data, e) {
             window.console.log('Submitted! ', data)
-        }).render(document.getElementById('form'))
+            
+            var sub = document.getElementById('submitted')
+            sub.innerHTML = JSON.stringify(data, null, 2)
+            sub.style.display = 'block'
+          }).render(document.getElementById('form'))
+        }
+      
+        renderForm()
     </script>
 </body>
 </html>

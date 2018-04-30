@@ -1,13 +1,17 @@
 {
   "presets": [
-    "env",
-    "react",
-    "stage-0"
+    ["env", {
+      "modules": false,
+      "loose": true,
+      "targets": {
+        "browsers": [
+          "last 2 versions",
+          "Explorer 11"
+        ]
+      }
+    }]
   ],
   "plugins": [
-    "transform-class-properties",
-    "transform-decorators",
-    "transform-react-constant-elements",
-    "transform-react-inline-elements"
+    "external-helpers"
   ]
 }

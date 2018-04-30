@@ -13,7 +13,10 @@ It can be used as a standalone tool or as part of a larger
 project. Mutt is written in ES6 with a standalone version
 being ES5 compatible - via Babel.
 
-Mutt forms was developed as internal tool at [boughtbymany.com](https://boughtbymany.com) and is now available under the MIT license. It is heavily influenced by [Django Forms](https://docs.djangoproject.com/en/1.10/topics/forms/)/[WTForms](http://wtforms.readthedocs.io/en/latest/) as well as [AlpacaJS](http://www.alpacajs.org/) and has a familiar API to these tools.
+Mutt forms was developed as internal tool at [boughtbymany.com](https://boughtbymany.com) and is now available under the
+MIT license. It is heavily influenced by [Django Forms](https://docs.djangoproject.com/en/1.10/topics/forms/)/
+[WTForms](http://wtforms.readthedocs.io/en/latest/) as well as [AlpacaJS](http://www.alpacajs.org/) and has a familiar
+API to these tools.
 
 
 ### Installation
@@ -60,6 +63,12 @@ and navigating to:
 
 `http://localhost:8000/test/standalone.html`
 
+#### Browser Support & Polyfills
+
+Mutt should work in all modern browsers. By default babel-polyfill
+is not included, but it should play nicely when included.
+
+See `test/standalone.html` for an example.
 
 #### Development
 
